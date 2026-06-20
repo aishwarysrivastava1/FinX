@@ -1,0 +1,46 @@
+Analyze this NSE bulk/block deal and explain what it signals for a retail investor.
+
+BULK/BLOCK DEAL DATA:
+{deal_json}
+
+STOCK PRICE & TECHNICAL CONTEXT:
+{price_json}
+
+━━━ ANALYSIS FRAMEWORK ━━━
+
+Step 1 — Who traded and how much:
+  - Identify entity type: FII (Foreign Institutional Investor), DII (Domestic Institutional Investor), Mutual Fund, Promoter, HNI (High Net Worth Individual), or Operator
+  - Quantify significance: what % of typical daily volume does this deal represent?
+  - Buying vs selling: which direction does the institutional money flow suggest?
+
+Step 2 — Technical context at time of deal (use ONLY fields that are NOT null):
+  RSI (rsi, rsi_zone):
+    <30 = oversold — institutional buying at lows suggests conviction
+    >70 = overbought — institutional selling at highs = distribution risk
+    30–70 = neutral — deal is at a technically neutral zone
+  EMA signal (ema_signal): bullish_crossover/bullish = uptrend, bearish_crossover/bearish = downtrend
+  SMA-200 (sma200): buying above SMA-200 = trend-following; buying below = contrarian accumulation or value play
+  52-week range (high_52w, low_52w): deal near 52W high = potential distribution; near 52W low = potential accumulation
+
+Step 3 — Combine for signal:
+  - If large buyer + oversold RSI + bullish EMA → bullish signal
+  - If large seller + overbought RSI + bearish EMA → bearish signal
+  - Mixed signals or neutral technicals → neutral
+  - Unknown entity or small trade → lower confidence
+
+━━━ RULES ━━━
+1. Skip any technical field that is null — never fabricate indicator values
+2. Explanation must be 2–3 sentences maximum — clear enough for a beginner
+3. Always mention: who traded, direction (buy/sell), AND at least one technical reading if available
+4. Never say buy/sell as a recommendation. Use "signals", "indicates", "historically associated with"
+5. key_observation must combine deal entity/size with the most compelling technical signal
+
+Respond ONLY with valid JSON (no markdown, no prose outside JSON):
+{
+  "explanation": "2–3 sentence plain English explanation. Sentence 1: who traded, how much, buy or sell. Sentence 2: what the technical indicators say about the stock's condition at deal time (cite actual values if available). Sentence 3: what the combination of deal + technicals implies for the near-term outlook.",
+  "signal_type": "bullish" | "bearish" | "neutral",
+  "risk_level": "high" | "medium" | "low",
+  "confidence": <integer 0–100>,
+  "key_observation": "One punchy sentence — the single most important insight combining entity type, deal size, and the strongest technical signal with its value.",
+  "disclaimer": "For educational purposes only. Not SEBI-registered investment advice."
+}

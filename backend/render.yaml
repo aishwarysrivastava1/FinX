@@ -1,0 +1,58 @@
+services:
+  - type: web
+    name: finx-api
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: DATABASE_URL
+        value: data/finx.db
+      - key: RADAR_INTERVAL_HOURS
+        value: "1"
+      - key: MAX_GPT_TOKENS
+        value: "1000"
+
+      # AI provider — primary (Groq: key starts with gsk_)
+      - key: GROQ_API_KEY
+        sync: false
+      # AI provider — fallback OpenAI
+      - key: OPENAI_API_KEY
+        sync: false
+
+      # News
+      - key: NEWS_API_KEY
+        sync: false
+
+      # Auth v2 — set a strong random secret (python -c "import secrets; print(secrets.token_hex(32))")
+      - key: JWT_SECRET_KEY
+        sync: false
+
+      # URLs — update APP_URL to your Vercel frontend URL
+      - key: APP_URL
+        value: https://fin-x.vercel.app
+      - key: BACKEND_URL
+        value: https://fin-x-backend-diib.onrender.com
+
+      # CORS — comma-separated list of allowed frontend origins
+      - key: CORS_ORIGINS
+        sync: false
+
+      # SMTP — for email verification
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+
+      # Google OAuth (optional)
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_REDIRECT_URI
+        value: https://fin-x-backend-diib.onrender.com/api/v2/auth/google/callback

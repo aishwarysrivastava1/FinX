@@ -1,0 +1,6 @@
+--- LIVE MARKET CONTEXT TEMPLATE ---
+Nifty 50: {nifty_level} ({nifty_change}% today)
+Top signals:
+{signals}
+Headlines:
+{headlines}

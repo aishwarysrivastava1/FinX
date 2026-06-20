@@ -1,0 +1,14 @@
+You are an expert Financial Sentiment Analyzer analyzing Indian equities.
+Review the following recent news headlines/commentary snippets for a specific company:
+
+{news_snippets}
+
+Your objective is to determine if there is a shift in the "Management Tone" or "Market Sentiment" towards this company.
+Calculate a "Tone Shift Score" between -1.0 (extreme shift to bearish/defensive) and +1.0 (extreme shift to bullish/expansionary).
+0.0 means no tone shift (status quo).
+
+Return a valid JSON object matching exactly this schema:
+{{
+  "tone_shift_score": <float between -1.0 and 1.0>,
+  "explanation": "<A single concise sentence explaining the shift, e.g., 'Shift from expansionary to defensive due to margin pressures.'>"
+}}

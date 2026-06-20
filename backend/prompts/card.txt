@@ -1,0 +1,62 @@
+Generate a detailed NSE Signal Card for {symbol}.
+
+AVAILABLE MARKET DATA:
+{price_json}
+
+NEWS HEADLINES:
+{news_headlines}
+
+━━━ TECHNICAL INDICATOR REFERENCE ━━━
+Use these definitions when writing technical_snapshot:
+
+RSI (rsi, rsi_zone):
+  <30 = oversold — stock may be due for a mean-reversion bounce
+  30–45 = weak momentum — downward pressure, watch for further softness
+  45–55 = neutral — no strong directional bias
+  55–70 = positive momentum — building strength without being extreme
+  >70 = overbought — buying exhaustion, elevated pullback risk
+
+EMA Crossover (ema_signal, ema20, ema50):
+  bullish_crossover = EMA-20 just crossed ABOVE EMA-50 → fresh golden cross, short-term bullish trigger
+  bullish = EMA-20 sustained ABOVE EMA-50 → ongoing uptrend momentum
+  bearish_crossover = EMA-20 just crossed BELOW EMA-50 → fresh death cross, short-term bearish trigger
+  bearish = EMA-20 sustained BELOW EMA-50 → ongoing downtrend momentum
+  neutral = EMAs flat or converging
+
+SMA-200 (sma200):
+  Price ABOVE SMA-200 = long-term bullish structure, institutional support zone
+  Price BELOW SMA-200 = long-term bearish structure, overhead resistance
+
+52-Week Range (high_52w, low_52w):
+  >80% of range = near annual high → limited upside headroom
+  <20% of range = near annual low → potential accumulation zone
+  40–60% of range = mid-range, balanced
+
+━━━ CRITICAL RULES ━━━
+1. Only analyze fields that are NOT null in the data above. Never invent or estimate missing values.
+2. technical_snapshot MUST be 2–3 specific sentences using actual values from the data (e.g., "RSI at 67.3", "EMA-20 at ₹1,450 crossed above EMA-50 at ₹1,380"). Never write generic filler.
+3. If RSI/EMA/SMA are null but price action data is present, describe the intraday move: change_pct, high/low range, volume vs average, open price gap.
+4. NEVER write "data unavailable", "insufficient data", "cannot analyze", or similar. Always generate something specific from what IS present.
+5. Never predict prices or say buy/sell. Use: "signals suggest", "traders monitoring this may watch", "historically this pattern has been associated with".
+6. Sentiment score: weight RSI + EMA signal + SMA-200 position + news equally.
+
+Respond ONLY with valid JSON — no markdown, no explanation, no text outside the JSON object:
+{
+  "symbol": "{symbol}",
+  "sentiment": "bullish" | "bearish" | "neutral",
+  "sentiment_score": <integer 0–100; 0=extremely bearish, 50=neutral, 100=extremely bullish>,
+  "sentiment_reason": "One sentence: cite the single strongest indicator supporting the sentiment score with its actual value (e.g., 'RSI at 71 confirms overbought conditions with an active EMA bearish crossover').",
+
+  "technical_snapshot": "2–3 sentences synthesizing ALL available indicators with their actual values. Structure: (1) RSI reading and its implication IF present. (2) EMA-20/EMA-50 relationship and signal type IF present. (3) SMA-200 position and/or 52-week range location IF present. If indicators are missing, describe today's price action specifically: 'Stock moved X% from prev close of ₹Y, trading in an intraday range of ₹A–₹B with Z% above/below open.' Every sentence must contain a number.",
+
+  "news_impact_score": <integer 0–100; 0=very negative, 50=neutral/no news, 100=very positive>,
+  "news_impact_summary": "1–2 sentences on what the headlines mean for near-term stock sentiment. If no relevant news, write 'No significant news in the monitored window — price action is driven purely by technicals.'",
+
+  "risk_flags": [
+    "Specific flags with actual values. Examples: 'RSI 74.2 — overbought zone, pullback risk', 'Price ₹1,180 below SMA-200 ₹1,340 — bearish long-term structure', 'EMA death cross active — short-term downtrend', 'At 91% of 52-week range — limited upside room', 'High FII sell pressure in recent bulk deals'. List every applicable flag. Empty array only if no risks are identifiable."
+  ],
+
+  "actionable_context": "1–2 sentences of educational context tying specific indicator readings to historical patterns. Examples: 'When RSI recovers from below 30 with an EMA bullish crossover, it has historically marked accumulation phases in large-cap NSE stocks.' or 'Traders watching this stock may note the ₹1,400 SMA-200 level as a key resistance zone before the next leg up.' Never use buy/sell language.",
+
+  "disclaimer": "For educational purposes only. Not SEBI-registered investment advice."
+}
